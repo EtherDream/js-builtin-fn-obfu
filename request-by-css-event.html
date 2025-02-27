@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>send request</title>
+  <style>
+    /* rules cannot be empty on IE */
+    @keyframes __a__{
+      from { font-size: 0; }
+      to { font-size: 0; }
+    }
+    .dummy {
+      animation: 0s linear 0s __a__;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // 
+    var xhr = new XMLHttpRequest()
+    xhr.onload = function() {
+      console.log('xhr onload')
+    }
+    xhr.open('GET', '?private')
+
+    var container = document.createElement('div')
+    container.className = 'dummy'
+    document.body.appendChild(container)
+
+    var sendFn = xhr.send.bind(xhr)
+    container.addEventListener('animationend', sendFn)
+
+    // used as a fallback in case the animation event is not triggered
+    var timer = setTimeout(sendFn, 100)
+    var clearFn = clearTimeout.bind(window, timer)
+    container.addEventListener('animationend', clearFn)
+
+
+    // for comparison
+    var xhr2 = new XMLHttpRequest()
+    xhr2.open('GET', '?public')
+    xhr2.send()
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<script>
+const pc = new Uint32Array(1)
+const pc_load = {
+  valueOf: Atomics.load.bind(null, pc, 0)
+}
+const jmp = (id) => Atomics.store.bind(null, pc, 0, id)
+const end = {}
+const cal = (bb) => bb.includes.bind(bb, end, 0)
+const bye = () => Object.bind(null, end)
+
+const log = (...args) => console.log.bind(console, ...args)
+
+const bb0 = Object.defineProperties([], [
+  { get: log('run bb0 !')     },
+  { get: log('jmp bb2')       },
+  { get: jmp(2)               },
+])
+const bb1 = Object.defineProperties([], [
+  { get: log('run bb1 !')     },
+  { get: log('bye')           },
+  { get: jmp(0)               },
+  { get: bye()                },
+])
+const bb2 = Object.defineProperties([], [
+  { get: log('run bb2 !')     },
+  { get: log('jmp bb1')       },
+  { get: jmp(1)               },
+])
+const table = Object.defineProperties([], [
+  { get: cal(bb0) },
+  { get: cal(bb1) },
+  { get: cal(bb2) },
+])
+const dispatch = table.at.bind(table, pc_load)
+const loop = Array(0xFFFFFFFF)
+const fn = loop.find.bind(loop, dispatch)
+
+window.addEventListener('click', fn)
+</script>

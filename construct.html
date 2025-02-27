@@ -1,0 +1,41 @@
+<script>
+const methodToFn = Date.bind.bind(Date.call)
+const bindApply = Date.bind.bind(Date.apply)
+const reduce = methodToFn([].reduce)
+
+const slot = []
+const fnWrite = [].splice.bind(slot, 0, 1)
+
+// perform some operations & set the return value
+const logArgs = Object.defineProperties([], [
+  { value: 'args:'            },
+  { get: [].at.bind(slot, 4)  },
+  { value: 'ctx:'             },
+  { get: [].at.bind(slot, 1)  },
+])
+const ops = Object.defineProperties([], [
+  { get: console.log.bind(console, 'Hello')         },
+  { get: console.log.bind(console, 'World')         },
+  { get: bindApply(console.log, console, logArgs)   },
+  { get: Reflect.set.bind(null, slot, 'length', 1)  },
+  { get: Reflect.set.bind(null, slot, 0, {foo: 1})  },
+])
+const fnRead = bindApply([].pop, slot, ops)
+
+function fn1() {}
+function fn2($1, $2) {}
+
+// reuse the fn2 function as the steps array
+fn2[0] = fnWrite
+fn2[1] = fnRead
+
+const proxy2 = new Proxy(fn2, {
+  apply: reduce   // F
+})
+const handler1 = reduce
+handler1.construct = proxy2
+const exportedFn = new Proxy(fn1, handler1)
+
+const ret = new exportedFn(11, 22, 33)
+console.log('result:', ret)
+</script>

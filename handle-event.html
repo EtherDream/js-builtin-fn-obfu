@@ -1,0 +1,31 @@
+<script>
+const bindApply = Date.bind.bind(Date.apply)
+const methodToFn = Date.bind.bind(Date.call)
+
+function getGetter(cls, key) {
+  return Object.getOwnPropertyDescriptor(cls.prototype, key).get
+}
+const getXByEvent = methodToFn(getGetter(MouseEvent, 'x'))
+const getYByEvent = methodToFn(getGetter(MouseEvent, 'y'))
+//
+// our goal:
+//
+// window.addEventListener('mousemove', e => {
+//   console.log('x:', getXByEvent(e), 'y:', getYByEvent(e))
+// })
+
+const slot = []
+
+const consoleLogArgs = Object.defineProperties([], [
+  { value: 'x:' },
+  { get: bindApply(getXByEvent, null, slot) },
+  { value: 'y:' },
+  { get: bindApply(getYByEvent, null, slot) },
+])
+const log = bindApply(console.log, console, consoleLogArgs)
+
+Object.defineProperty(slot, 1, {
+  set: log
+})
+window.addEventListener('mousemove', slot.fill.bind(slot))
+</script>
