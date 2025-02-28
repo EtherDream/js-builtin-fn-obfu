@@ -1,0 +1,9 @@
+<script>
+  delete Math.imul
+</script>
+<script src="https://cdn.jsdelivr.net/npm/core-js-bundle"></script>
+<script>
+  Math.imul({
+    valueOf: () => console.log(Error().stack)
+  })
+</script>

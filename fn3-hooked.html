@@ -1,0 +1,23 @@
+<script>
+Math.imul = function(a, b) {}
+
+let free = 0
+let isHooked = false
+
+function fillStack() {
+  try {
+    fillStack()
+  } catch {
+    return
+  }
+  if (free++ === 1) {
+    try {
+      Math.imul(0, 0)
+    } catch {
+      isHooked = true
+    }
+  }
+}
+fillStack()
+console.log('isHooked:', isHooked)
+</script>
