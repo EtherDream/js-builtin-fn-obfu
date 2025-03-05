@@ -10,7 +10,7 @@ const fnWrite = [].splice.bind(slot, 0, 1)
 const logArgs = Object.defineProperties([], [
   { value: 'args:'            },
   { get: [].at.bind(slot, 4)  },
-  { value: 'ctx:'             },
+  { value: 'newTarget:'       },
   { get: [].at.bind(slot, 1)  },
 ])
 const ops = Object.defineProperties([], [
