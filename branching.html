@@ -1,56 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>branch</title>
+</head>
+<body>
+Open the console and click anywhere to run
 <script>
-const a = {
-  valueOf: prompt.bind(window, 'Enter the value a', 1)
-}
-const b = {
-  valueOf: prompt.bind(window, 'Enter the value b', 2)
-}
-const r0 = new Int32Array(1)
+  const a = {
+    valueOf: prompt.bind(window, 'Enter the value a', 1)
+  }
+  const b = {
+    valueOf: prompt.bind(window, 'Enter the value b', 2)
+  }
+  const r0 = new Int32Array(1)
 
-const r0_fetch = {
-  valueOf: Atomics.load.bind(null, r0, 0)
-}
-const r0_sign = {
-  valueOf: Math.sign.bind(null, r0_fetch)
-}
-const mul = (op1, op2) => ({
-  valueOf: Math.imul.bind(null, op1, op2)
-})
-const add = (dst, src) => Atomics.add.bind(null, dst, 0, src)
-const sub = (dst, src) => Atomics.sub.bind(null, dst, 0, src)
-const mov = (dst, src) => Atomics.store.bind(null, dst, 0, src)
+  const r0_load = {
+    valueOf: Atomics.load.bind(null, r0, 0)
+  }
+  const r0_sign = {
+    valueOf: Math.sign.bind(null, r0_load)
+  }
+  const mul = (op1, op2) => ({
+    valueOf: Math.imul.bind(null, op1, op2)
+  })
+  const add = (dst, src) => Atomics.add.bind(null, dst, 0, src)
+  const sub = (dst, src) => Atomics.sub.bind(null, dst, 0, src)
+  const mov = (dst, src) => Atomics.store.bind(null, dst, 0, src)
 
-const end = {}
-const cal = (pos) => mem.includes.bind(mem, end, pos)
-const ret = () => Object.bind(null, end)
+  const end = {}
+  const cal = (pos) => mem.includes.bind(mem, end, pos)
+  const ret = () => Object.bind(null, end)
 
-const log = (...args) => console.log.bind(console, ...args)
-const mem = []
+  const log = (...args) => console.log.bind(console, ...args)
+  const mem = []
 
-Object.defineProperties(mem, [
-  /*00*/ { get: log('main begin')           },
-  /*01*/ { get: mov(r0, a)                  },
-  /*02*/ { get: sub(r0, b)                  },
-  /*03*/ { get: mov(r0, mul(r0_sign, 4))    },
-  /*04*/ { get: add(r0, 12)                 },
-  /*05*/ { get: cal(r0)                     },
-  /*06*/ { get: log('main end')             },
-  /*07*/ { get: ret()                       },
+  Object.defineProperties(mem, [
+    /*00*/ { get: log('main begin')           },
+    /*01*/ { get: mov(r0, a)                  },
+    /*02*/ { get: sub(r0, b)                  },
+    /*03*/ { get: mov(r0, mul(r0_sign, 4))    },
+    /*04*/ { get: add(r0, 12)                 },
+    /*05*/ { get: cal(r0)                     },
+    /*06*/ { get: log('main end')             },
+    /*07*/ { get: ret()                       },
 
-  /*08*/ { get: log('br1 begin')            },
-  /*09*/ { get: log('a < b')                },
-  /*10*/ { get: log('br1 end')              },
-  /*11*/ { get: ret()                       },
+    /*08*/ { get: log('br1 begin')            },
+    /*09*/ { get: log('a < b')                },
+    /*10*/ { get: log('br1 end')              },
+    /*11*/ { get: ret()                       },
 
-  /*12*/ { get: log('br2 begin')            },
-  /*13*/ { get: log('a = b')                },
-  /*14*/ { get: log('br2 end')              },
-  /*15*/ { get: ret()                       },
+    /*12*/ { get: log('br2 begin')            },
+    /*13*/ { get: log('a = b')                },
+    /*14*/ { get: log('br2 end')              },
+    /*15*/ { get: ret()                       },
 
-  /*16*/ { get: log('br3 begin')            },
-  /*17*/ { get: log('a > b')                },
-  /*18*/ { get: log('br3 end')              },
-  /*19*/ { get: ret()                       },
-])
-window.addEventListener('click', cal(0))
+    /*16*/ { get: log('br3 begin')            },
+    /*17*/ { get: log('a > b')                },
+    /*18*/ { get: log('br3 end')              },
+    /*19*/ { get: ret()                       },
+  ])
+  window.addEventListener('click', cal(0))
 </script>
+</body>
+</html>

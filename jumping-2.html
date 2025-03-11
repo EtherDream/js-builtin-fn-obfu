@@ -1,38 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ins-level jump</title>
+</head>
+<body>
+Open the console and click anywhere to run
 <script>
-const pc = Uint32Array.of(1)
-const pc_load = {
-  valueOf: Atomics.load.bind(0, pc, 0)
-}
-const jmp = (pos) => Math.max.bind(0, 0xDEADC0DE, {
-  valueOf: Atomics.store.bind(0, pc, 0, pos)
-})
-const log = (...args) => console.log.bind(console, ...args)
+  const pc = Uint32Array.of(1)
+  const pc_load = {
+    valueOf: Atomics.load.bind(0, pc, 0)
+  }
+  const jmp = (pos) => Math.max.bind(0, 0xDEADC0DE, {
+    valueOf: Atomics.store.bind(0, pc, 0, pos)
+  })
+  const log = (...args) => console.log.bind(console, ...args)
 
-const mem = Object.defineProperties([], [
-  { /*00*/ get: jmp(1) /* exit */   },
+  const mem = Object.defineProperties([], [
+    { /*00*/ get: jmp(1) /* exit */   },
 
-  { /*01*/ get: log('run bb0 !')    },
-  { /*02*/ get: log('jmp bb2')      },
-  { /*03*/ get: jmp(7)              },
+    { /*01*/ get: log('run bb0 !')    },
+    { /*02*/ get: log('jmp bb2')      },
+    { /*03*/ get: jmp(7)              },
 
-  { /*04*/ get: log('run bb1 !')    },
-  { /*05*/ get: log('bye')          },
-  { /*06*/ get: jmp(0)              },
+    { /*04*/ get: log('run bb1 !')    },
+    { /*05*/ get: log('bye')          },
+    { /*06*/ get: jmp(0)              },
 
-  { /*07*/ get: log('run bb2 !')    },
-  { /*08*/ get: log('jmp bb1')      },
-  { /*09*/ get: jmp(4)              },
-])
+    { /*07*/ get: log('run bb2 !')    },
+    { /*08*/ get: log('jmp bb1')      },
+    { /*09*/ get: jmp(4)              },
+  ])
 
-const dispatch = [].indexOf.bind(mem, 0xDEADC0DE, pc_load)
+  const dispatch = [].indexOf.bind(mem, 0xDEADC0DE, pc_load)
 
-// returns `true` if dispatch() == 0
-const lut = [].at.bind([true], {
-  valueOf: dispatch
-})
-const loop = Array(0xFFFFFFFF)
-const fn = [].find.bind(loop, lut)
+  // returns `true` if dispatch() == 0
+  const lut = [].at.bind([true], {
+    valueOf: dispatch
+  })
+  const loop = Array(0xFFFFFFFF)
+  const fn = [].find.bind(loop, lut)
 
-window.addEventListener('click', fn)
-// fn()
+  window.addEventListener('click', fn)
+  // fn()
 </script>
+</body>
+</html>
